@@ -1,0 +1,31 @@
+#include <stdbool.h>
+#include <stdlib.h>
+
+bool isValid(char* s) {
+    int length = 0;
+    while (s[length] != '\0') length++; 
+
+    char* stack = (char*)malloc(length * sizeof(char));
+    int top = -1;
+
+    for (int i = 0; i < length; i++) {
+        if (s[i] == '(' || s[i] == '{' || s[i] == '[') {
+            // Push opening bracket onto the stack
+            stack[++top] = s[i];
+        } else {
+            if (top == -1 ||
+               (s[i] == ')' && stack[top] != '(') ||
+               (s[i] == '}' && stack[top] != '{') ||
+               (s[i] == ']' && stack[top] != '[')) {
+                free(stack); 
+                return false;
+            }
+           
+            top--;
+        }
+    }
+
+    bool isValid = (top == -1);
+    free(stack); // Free allocated memory
+    return isValid;
+}
